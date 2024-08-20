@@ -60,8 +60,19 @@
                 </div>
             </div>
             <div class="col-sm-6 col-md-3">
+                <a href="{{ route('downloadPDF') }}" class="btn btn-primary">Download PDF</a>
                 <button type="submit" class="btn btn-success btn-block"> Search </button>
             </div>
+            {{-- <div class="col-sm-6 col-md-3">
+                <form action="{{route('patients.generatePDF')}}" method="get">
+                    <input type="hidden" name="department_id" value="{{ request('department_id') }}">
+                    <input type="hidden" name="start" value="{{ request('start') }}">
+                    <input type="hidden" name="end" value="{{ request('end') }}">
+                
+                    <button type="submit" class="btn btn-success btn-block"> PDF</button>
+
+                </form>
+            </div> --}}
         </div>
     </form>
 </div>
@@ -81,7 +92,7 @@
                 <div class="col-md-12">
                     @if (count($patients) > 0)
                         <div class="table-responsive">
-                            <table class="table table-border table-striped custom-table datatable mb-0">
+                            <table class="table table-bordered custom-table datatable mb-0">
                                 <thead>
                                     <tr>
                                         <th>Serial No</th>

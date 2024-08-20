@@ -33,8 +33,7 @@ class EmployeeController extends Controller
                         $role_name = Role::where('name', $role_id)->first()->id;
                         $query->where('role_id', 'LIKE', '%' . $role_name . '%');
                     }
-                )
-                ->paginate(5);
+                )->paginate(5);
         } else {
             $employees = Employee::paginate(5);
         }

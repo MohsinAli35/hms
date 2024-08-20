@@ -7,6 +7,7 @@ use App\Models\Token;
 use App\Models\Patient;
 use App\Models\Department;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PatientController extends Controller
 {
@@ -34,6 +35,8 @@ class PatientController extends Controller
 
        
         $patients = Patient::where('department_id','LIKE', '%' . $id . '%')->paginate(15);
+        session(['filtered_patients' => $patients]);
+
         $tokens = Token::all();
         $i=1;
         $data = '';
@@ -137,9 +140,21 @@ class PatientController extends Controller
             $tokens = Token::all();
             $departments = Department::where('status', 1)->get();
             $paginate = 0;
+            session(['filtered_patients' => $patients]);
             return view('patient.patient', compact('patients','departments','tokens','paginate'));
 
     }
+    //   generate pdf
+    public function downloadPdf()
+    {
+        // Retrieve the filtered data from the session
+        $patients = session('filtered_patients');
+       $tokens= Token::all();
+       $pdf = Pdf::loadView('reports.index', compact('patients', 'tokens'));
+
+// Stream the PDF
+return $pdf->stream('patient_report.pdf');
+ }
 
     public function showSlip(Patient $patient)
     {
@@ -203,4 +218,6 @@ class PatientController extends Controller
                 ->with('danger', 'Something wrong. Please try again');
         }
     }
+
+    
 }

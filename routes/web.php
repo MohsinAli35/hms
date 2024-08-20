@@ -11,12 +11,14 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\pdfController;
 use App\Http\Controllers\RoleController;
 
 Route::get('/login',[AuthController::class,'login'])->name('login');
 
 Route::post('/login',[AuthController::class,'check'])->name('login.check');
 
+Route::get('/pdf-generate',[pdfController::class , 'index'])->name('pdf.generate');
 
 Route::middleware(['auth',MainMiddleware::class])->group(function () {
     // routes after login
@@ -29,6 +31,7 @@ Route::middleware(['auth',MainMiddleware::class])->group(function () {
     Route::get('/paitents',[PatientController::class,'index'])->name('patients.index');
     Route::get('/paitents/view/{patient}',[PatientController::class,'show'])->name('patients.show');
     Route::get('/paitents/view/{patient}/slip',[PatientController::class,'showSlip'])->name('patients.showSlip');
+    Route::get('/download-pdf', [PatientController::class,'downloadPdf'])->name('downloadPDF');
 
      // search through departement
      Route::get('/paitents/search/department/{id}',[PatientController::class,'departmentSearch'])->name('departmentSearch');
