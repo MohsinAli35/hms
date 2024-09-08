@@ -11,60 +11,56 @@
                 <div class="col-sm-4 col-3">
                     <h4 class="page-title">Patients</h4>
                 </div>
-                <div class="col-sm-8 col-9 text-right m-b-20">
-                    <a href="{{ route('patients.create') }}" class="btn btn-primary float-right btn-rounded"><i class="fa fa-plus"></i> Add Patient</a>
-                    <a href="{{ route('patients.index') }}" class="btn btn-danger mr-5 float-right btn-rounded"><i class="fa fa-arrow-left"></i> Back</a>
-                    
-                </div>
+                <!-- <div class="col-sm-8 col-9 text-right m-b-20">
+                                    <a href="add-patient.php" class="btn btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Patient</a>
+                                </div> -->
             </div>
             <div class="row filter-row justify-content-end">
                
-              
-                <div class="col-md-12">
-                    <form action="{{ route('search.patient') }}" method="GET">
-                        @csrf
-                        <div class="row">
-                            <!-- Department Selection -->
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group  ">
-                                    {{-- <label class="focus-label">By Department</label> --}}
-                                    <select class="form-select form-group" name="department">
-                                        <option value="">Select Department</option>
-                                        @foreach ($departments as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
                 
-                            <!-- CNIC Input -->
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group">
-                                    <input class="form-control" name="cnic" type="number" placeholder="Enter CNIC">
-                                    @error('cnic')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <!-- Phone Input -->
-                            <div class="col-sm-6 col-md-3">
-                                <div class="form-group ">
-                                    {{-- <label class="focus-label" for="phone">Phone No</label> --}}
-                                    <input class="form-control floating " id="phone" name="phone" type="number" placeholder="Enter Phone No">
-                                    @error('phone')
-                                        <span class="text-danger">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                
-                            <!-- Search Button -->
-                            <div class="col-sm-6 col-md-3">
-                                <button type="submit" class="btn btn-success ">Search</button>
-                            </div>
-                        </div>
-                    </form>
+<div class="col-md-12">
+    <form action="{{route('dateSearch')}}" method="GET">
+        <div class="row">
+            <div class="col-sm-6 col-md-3" >
+                <div class="form-group form-focus select-focus">
+                    {{-- <label class="focus-label">By Department</label> --}}
+                    <select class="form-select" name="department" id="department_search">
+                        <option value="">Select Department</option>
+                        @foreach ($departments as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                        
+                    
+                    </select>
                 </div>
-                      
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus  ">
+                    
+                        <input  class="form-control floating pb-4 " name="start" type="date">
+                        @error('start')
+                            <span class="text-danger ">{{$message}}</span>
+                        @enderror
+                
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+                <div class="form-group form-focus">
+                        <input  class="form-control floating pb-4" name="end" type="date">
+                        @error('end')
+                        <span class="text-danger ">{{$message}}</span>
+                    @enderror
+                    
+                </div>
+            </div>
+            <div class="col-sm-6 col-md-3">
+               
+                <button type="submit" class="btn btn-success btn-block"> Search </button>
+            </div>
+          </div>
+    </form>
+</div>
+                
             </div>
             <div class="row">
                 @if (session('danger'))
@@ -214,29 +210,7 @@
 
 
     <script src="{{ asset('assets/jquery/jquery.js') }}"></script>
-    <script>
-        $(document).ready(function() {
-
-            // search
-            $('#department_search').on('change', function() {
-                var value = $(this).val();
-                if (value != "") {
-                    $.ajax({
-                        url: "paitents/search/department/"+value,
-                        type: "GET",
-                        success: function(data) {
-                            console.log(data);
-
-                            $('#tbody').html(data);
-                            $('#all-department').css('display','block');
-                           
-                        }
-                    });
-                }
-                
-            });
-        });
-    </script>
+ 
 
     <!-- patients23:19-->
 

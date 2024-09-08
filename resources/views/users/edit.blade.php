@@ -22,7 +22,7 @@
             <div class="col-md-12">
                 <form action="{{route('users.update',$user->id)}}" method="post">
                     @csrf
-                    @method('PUT')
+                    @method('PATCH')
                     <div class="row">
 
                 

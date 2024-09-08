@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Employee;
 use Illuminate\Http\Request;
 use App\Models\Role;
+use App\Exports\employeeExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -12,33 +14,42 @@ class EmployeeController extends Controller
      * Display a listing of the resource.
      */
     public function index(Request $request)
-    {
-        $roles = Role::all();
-        if ($request->has('employee_id') || $request->has('name') || $request->has('role_id')) {
-            $employees = Employee::when(
-                $request->employee_id,
-                function ($query, $employee_id) {
-                    $query->where('employee_id', 'LIKE', '%' . $employee_id . '%');
-                }
-            )
-                ->when(
-                    $request->name,
-                    function ($query, $name) {
-                        $query->where('name', 'LIKE', '%' . $name . '%');
-                    }
-                )
-                ->when(
-                    $request->query('role_id'),
-                    function ($query, $role_id) {
-                        $role_name = Role::where('name', $role_id)->first()->id;
-                        $query->where('role_id', 'LIKE', '%' . $role_name . '%');
-                    }
-                )->paginate(5);
-        } else {
-            $employees = Employee::paginate(5);
-        }
-        return view('employees.index', compact('employees', 'roles'));
+{
+    $roles = Role::all();
+
+    // Initialize $employees variable
+    $employees = Employee::query();
+
+    if ($request->has('employee_id') || $request->has('name') || $request->has('role_id')) {
+        $employees = $employees->when(
+            $request->employee_id,
+            function ($query, $employee_id) {
+                $query->where('employee_id', 'LIKE', '%' . $employee_id . '%');
+            }
+        )
+        ->when(
+            $request->name,
+            function ($query, $name) {
+                $query->where('name', 'LIKE', '%' . $name . '%');
+            }
+        )
+        ->when(
+            $request->query('role_id'),
+            function ($query, $role_id) {
+                $role_name = Role::where('name', $role_id)->first()->id;
+                $query->where('role_id', $role_name); // Direct match instead of LIKE
+            }
+        );
+
+        session(['filteredemp' => $employees->get()]);
     }
+
+    // Paginate the results whether it's filtered or not
+    $employees = $employees->orderBy('id', 'desc')->paginate(15);
+
+    return view('employees.index', compact('employees', 'roles'));
+}
+
 
     /**
      * Show the form for creating a new resource.
@@ -59,42 +70,21 @@ class EmployeeController extends Controller
             'dob' => 'required|date',
             'employee_id' => 'required|unique:employees,employee_id|max:20',
             'role_id' => 'required|max:20',
-            'cnic' => 'required|max:25',
+            'cnic' => 'required|min:13|max:16',
             'd_i' => 'required|date',
+            'd_e' => 'required|date',
             
-            'blood' => 'required',
+            'blood' => 'required|max:16',
 
 
-            'office_no' => 'required|max:35',
-            'contact_no' => 'required|max:11',
+            'office_no' => 'required|min:7|max:19',
+            'contact_no' => 'required|min:11|max:13',
             'address' => 'required|max:90',
             'account_no' => 'required|max:35',
             'image' => 'mimes:pdf|max:2048',
 
         ]);
-        //  if($request->role == 1)
-        //  {
-        //     $emp= "Dor".$request->id;
-        //  }
-        //  elseif(){
 
-        //  }
-
-        //      if($request->hasfile('image')){
-
-        // $pdfFile = $request->file('image');
-        //  $request->image->storeAs('public/pdfs', $pdfFile->getClientOriginalName());
-
-        //     //  $imageName = time().'.'.$request->image->extension();  
-        //     //  $data = $request->all();
-
-        //      $data['image'] = $pdfFile;
-        //      Employee::create($data);
-        //      dd($data);
-        //      return to_route('employees.index');
-        //     } 
-        //      Employee::create($request->all());
-        //           return to_route('employees.index');
         $image = '';
         
         if ($request->hasFile('image')) {
@@ -116,7 +106,7 @@ class EmployeeController extends Controller
             'role_id' => $request->role_id,
             'cnic' => $request->cnic,
             'd_i' => $request->d_i,
-            'd_e' => '1888-01-01',
+            'd_e' => $request->d_e,
             'blood' => $request->blood,
 
 
@@ -131,7 +121,22 @@ class EmployeeController extends Controller
         return to_route('employees.index');
     }
 
+//  Download the excel file  
 
+
+    public function employeesexcel(){
+
+        $query = Employee::query();
+        $employees = session('filteredemp');
+
+        if($employees){
+        $query->wherein('id',$employees->pluck('id')->toArray());
+        }
+        $roles = Role::all();
+        $employees = $query->orderBy('id', 'DESC')->get();
+
+        return Excel::download(new employeeExport($employees,$roles), 'Download_Employees.xlsx');
+    }
 
     /**
      * Display the specified resource.
@@ -162,12 +167,12 @@ class EmployeeController extends Controller
             // 'employee_id' => 'required|unique:employees,employee_id|max:20',
             
             'role_id' => 'required|max:20',
-            'cnic' => 'required|max:25',
+            'cnic' => 'required|min:13|max:16',
             'd_i' => 'required|date',
             'd_e' => 'required|date',
             'blood' => 'required',
-            'office_no' => 'required|max:35',
-            'contact_no' => 'required|max:11',
+            'office_no' => 'required|min:8|max:19',
+            'contact_no' => 'required|min:11|max:13',
             'address' => 'required|max:90',
             'account_no' => 'required|max:35',
             'image' => 'mimes:pdf|max:2048',

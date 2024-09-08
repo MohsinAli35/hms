@@ -21,7 +21,7 @@
                   
                     @if ($user->image)
                         <div class="my-2">
-                            <img src="{{asset('storage/' .$user->image)}}" class="img-fluid rounded-circle" style="height:180px;width:180px;" alt="">
+                            <img src="{{asset('public/storage/' .$user->image)}}" class="img-fluid rounded-circle" style="height:180px;width:180px;" alt="">
                         </div>
                     @else
                     <span class="text-info fs-6 d-block">Please Upload Your Profile Picture</span>

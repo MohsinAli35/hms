@@ -11,7 +11,7 @@
                         <h4 class="page-title">User</h4>
                     </div>
                     <div class="col-sm-8 col-9 text-right m-b-20">
-                        <a href="add-User.php" class="btn btn-primary float-right btn-rounded"><i class="fa fa-plus"></i> Add User</a>
+                        <a href="{{route('users.create')}}" class="btn btn-primary float-right btn-rounded"><i class="fa fa-plus"></i> Add User</a>
                     </div>
                     @if (session('success'))
                     <div class="col-md-12 my-2 text-success">{{session('success')}}</div>
@@ -359,7 +359,7 @@
                 var id = $(this).val();
                 if( id != ''){
                     $.ajax({
-                        url : "/users/search/"+id,
+                        url : "users/search/"+id,
                         type:"GET",
                         success:function(data){
                             $('#tbody').html(data);
@@ -372,7 +372,7 @@
                 var name = $(this).val();
                 if( name != ''){
                     $.ajax({
-                        url : "/users/search/name/"+name,
+                        url : "users/search/name/"+name,
                         type:"GET",
                         success:function(data){
                             $('#tbody').html(data);
@@ -385,7 +385,7 @@
                 var role = $(this).val();
                 if( role != ''){
                     $.ajax({
-                        url : "/users/search/role/"+role,
+                        url : "users/search/role/"+role,
                         type:"GET",
                         success:function(data){
                             $('#tbody').html(data);

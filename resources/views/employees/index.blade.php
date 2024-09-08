@@ -9,6 +9,8 @@
             </div>
             <div class="col-sm-8 col-9 text-right m-b-20">
                 <a href="{{ route('employees.create') }}" class="btn btn-primary float-right btn-rounded"><i class="fa fa-plus"></i> Add Employee</a>
+                <a href="{{ route('employees.index') }}" class="btn btn-danger mr-5 float-right btn-rounded"><i class="fa fa-arrow-left"></i> Back</a>
+                
             </div>
         </div>
         <div class="row filter-row">
@@ -40,7 +42,6 @@
                 </div>
             </div>
             <div class="col-sm-6 col-md-3">
-                {{-- <a href="#" class="btn btn-success btn-block" type="submit"> Search </a> --}}
                 <button type="submit"  class="btn btn-success btn-block">Search</button>
             </div>
         </div>
@@ -71,7 +72,7 @@
                         <tbody>
                             @foreach ($employees as $employee)
                             <tr>
-                                <td>{{ $employee->id }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $employee->name }}</td>
                                 <td>{{ $employee->dob }}</td>
                                 <td>{{ $employee->employee_id }}</td>
@@ -125,28 +126,14 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <div class="container-fluid">
-                        <div class="d-flex justify-content-center">
-                            <ul class="pagination">
-                                <li class="page-item {{ ($employees->currentPage() == 1) ? ' disabled' : '' }}">
-                                    <a class="page-link" href="{{ $employees->previousPageUrl() }}" aria-label="Previous">
-                                        <span aria-hidden="true"><i class="fa fa-chevron-left"></i></span>
-                                    </a>
-                                </li>
-                                @foreach ($employees->getUrlRange(1, $employees->lastPage()) as $page => $url)
-                                    <li class="page-item {{ ($employees->currentPage() == $page) ? ' active' : '' }}">
-                                        <a class="page-link" href="{{ $url }}">{{ $page }}</a>
-                                    </li>
-                                @endforeach
-                                <li class="page-item {{ ($employees->currentPage() == $employees->lastPage()) ? ' disabled' : '' }}">
-                                    <a class="page-link" href="{{ $employees->nextPageUrl() }}" aria-label="Next">
-                                        <span aria-hidden="true"><i class="fa fa-chevron-right"></i></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                        
-                        </div>
+                    <div class="col-sm-6 col-md-3">
+                        <button class="btn btn-primary"> <a class=" text-white text-decoration-none" href="{{route('empexcel')}}">Download</a></button>
+                    </div>
+                    <div class="mt-5">
+                        {{ $employees->links() }}
+                    </div>
+                  
+                       
                     </div>
                 </div>
             </div>

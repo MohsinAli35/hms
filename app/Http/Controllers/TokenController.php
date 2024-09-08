@@ -17,7 +17,7 @@ class TokenController extends Controller
 
         $depart = Department::find($department);
         $dept_token = Token::where('department_id',$department)
-                      ->whereDate('created_at',Carbon::today()->toDateString())
+                      ->whereDate('created_at',Carbon::today()->setTimezone('Asia/Karachi')->toDateString())
                       ->latest()
                       ->first();
         if(!$dept_token){
@@ -40,7 +40,7 @@ class TokenController extends Controller
                 ]
                 );
         }
-        return $dept_token->token;
+        return $dept_token;
 
     }
     public function addPatient(){
@@ -52,19 +52,22 @@ class TokenController extends Controller
             [
                 'name'=>'required|max:700',
                 'department_id'=>'required',
-                'cnic'=>'max:20',
-                'age'=>'required',
-                'phone'=>'max:15',
-                'gender'=>'required'
+                'cnic'=>'min:13|max:15',
+                'age'=>'required|max:3',
+                'phone'=>'min:11|max:15',
+                'gender'=>'required',
+                'price'=>'max:99',
+                'remark'=>'max:99',
             ]
             );
+            $validated['price'] = $validated['price'] ?? 0;
         $new= Patient::create($validated);
         if($new){
             $patient = Patient::latest()->first();
             $token = $this->generateToken($patient->id,$patient->name,$patient->department_id);
             if($token){
-                return redirect(route('patients.index'))
-                ->with('success','Patient created successfull with token.');
+                return view('patient.slip' ,  ['patient' => $patient, 'token' => $token]);
+                
             }
         }
             

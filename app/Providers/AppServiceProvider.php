@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Providers;
-
-use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Pagination\Paginator;
+// use App\Models\Setting;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -20,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Paginator::useB
+        
+            // // Fetch a single settings record
+            // $settings = Setting::first(); // Get the first record of the settings
+    
+            // // Share the settings instance with all views
+            // View::share('settings', $settings);
+        
+        Paginator::useBootstrapFive();
     }
 }

@@ -11,6 +11,8 @@
                 <div class="row my-2">
                     <div class="col-md-6 my-2">
                         <h4 class="text-uppercase">Name : <strong>{{ $patient->name }}</strong></h4>
+                        <h4 class="text-uppercase">Charges : <strong>{{ $patient->price }}</strong></h4>
+                        <h4 class="text-uppercase">Remark : <strong>{{ $patient->remark }}</strong></h4>
                         <h4 class="text-uppercase">Age : <strong>{{ $patient->name }}</strong></h4>
                         <h4 class="text-uppercase">Gender : <strong>
                                 @switch($patient->gender)

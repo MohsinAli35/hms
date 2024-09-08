@@ -15,9 +15,16 @@ class Patient extends Model
         'age',
         'phone',
         'gender',
+        'price',
+        'remark',
     ];
+    public function token()
+    {
+        return $this->hasmany(Token::class);
+    }
     public function department(){
         return $this->belongsTo(Department::class);
     }
+    
    
 }

@@ -25,6 +25,15 @@ public function handle(){
     Token::whereData('created_at','<',Carbon::today()->toDateString())
     ->delete();
 }
+public function patient()
+{
+    return $this->belongsTo(Patient::class, 'paitent_id'); // Correct typo to 'patient_id' if applicable
+}
+
+public function department()
+{
+    return $this->belongsTo(Department::class, 'department_id');
+}
      // public static function generateToken($paitent_id,$p_name,$department){
 
     //     $currentData = Carbon::now()->format('Y-m-d');

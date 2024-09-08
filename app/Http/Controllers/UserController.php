@@ -41,7 +41,7 @@ class UserController extends Controller
                 'email'=>'required|max:75',
                 'password'=>'required|max:16|min:8',
                 'userid'=>'required|max:5',
-                'dateofjoining'=>'required',
+                'dateofjoining'=>'required|date',
                 'phone'=>'required|max:15',
                 'role'=>'required|max:2',
                 'status'=>'required|max:2'
@@ -112,8 +112,8 @@ class UserController extends Controller
                 'l_name'=>'required|max:30',
                 'username'=>'required|max:50',
                 'email'=>'required|max:75',
-                'userid'=>'required|max:5',
-                'dateofjoining'=>'required',
+                'userid'=>'required|max:8',
+                'dateofjoining'=>'required|date',
                 'phone'=>'required|max:15',
                 'role'=>'required|max:2',
                 'status'=>'required|max:2'
@@ -122,21 +122,21 @@ class UserController extends Controller
 
             // seting user id in HMS-A-01 format
             // Admin
-            if ($validated['role'] == 1) {
-                $validated['role'] = "HMS-A-".$validated['role'];
-            }
-            // Receptionist
-            if ($validated['role'] == 2) {
-                $validated['role'] = "HMS-R-".$validated['role'];
-            }
+            // if ($validated['role'] == 1) {
+            //     $validated['role'] = "HMS-A-".$validated['role'];
+            // }
+            // // Receptionist
+            // if ($validated['role'] == 2) {
+            //     $validated['role'] = "HMS-R-".$validated['role'];
+            // }
 
-            if ($request->input('password') != '') {
-                $request->validate([
-                    'password'=>'min:8|max:12'
-                ]);
-                $validated['password'] =$request->password;
-            }
-            $validated['dateofjoining']= Carbon::parse($validated['dateofjoining'])->format('Y-m-d');
+            // if ($request->input('password') != '') {
+            //     $request->validate([
+            //         'password'=>'min:8|max:12'
+            //     ]);
+            //     $validated['password'] =$request->password;
+            // }
+            // $validated['dateofjoining']= Carbon::parse($validated['dateofjoining'])->format('Y-m-d');
             $update = $user->update($validated);
             if($update)
             {
