@@ -50,7 +50,7 @@
     </style>
     
 </head>
-{{-- <body onload="window.print()"> --}}
+<body onload="window.print()">
     <div class="container">
         <div class="header">
             <div style="margin-top: 50px;">Patient Token Slip</div>
