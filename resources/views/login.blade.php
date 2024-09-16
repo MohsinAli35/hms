@@ -1,3 +1,6 @@
+@php
+    $setting = App\Models\Setting::first();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,8 +9,8 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/img/logo1.png')}}">
-    <title>Preclinic - Medical & Hospital - Bootstrap 4 Admin Template</title>
+    <link rel="shortcut icon" type="image/x-icon" href="{{asset('public/storage/'.$setting->favicon)}}">
+    <title>{{$setting->name}}</title>
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/bootstrap.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/font-awesome.min.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style.css')}}">
@@ -27,7 +30,7 @@
                         @method('POST')
                         @csrf
 						<div class="account-logo">
-                            <a href="{{route('home')}}"><img src="{{asset('assets/img/logo1.png')}}" alt=""></a>
+                            <a href="{{route('home')}}"><img src="{{asset('public/storage/'.$setting->logo)}}" alt=""></a>
                         </div>
                         @if (session('danger'))
                         <span class="text-danger fs-6 my-2">{{session('danger')}}</span>

@@ -4,10 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class ExpireProjectMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,14 +16,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // only admin 
-        // admin role is 1 
-        if(auth()->user()->role == 1){
-            return $next($request);
-        }
-        else{
-            return redirect()->back();
+        $expirationDate = env('EXPIRATION_DATE');
+        $currentDate = Date::now();
 
+        if ($currentDate->gt($expirationDate)) {
+            abort(503, 'Project Expired');
         }
+
+        return $next($request);
+        
     }
 }
